@@ -48,8 +48,26 @@ public class BookController {
     }
 
     @DeleteMapping("/book/remove/{id}")
-    public void deleteBook(@PathVariable int id){
+    public ResponseEntity<?> deleteBook(@PathVariable int id){
         orderService.deleteBook(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "book/update",consumes = "application/json")
+    public ResponseEntity<?> updateBook(@RequestBody Book book){
+        orderService.updateBook(book);
+
+        return ResponseEntity.accepted().build();
+    }
+
+
+    @GetMapping("book/return/{id}")
+    public ResponseEntity<?> returnBook(@PathVariable int id){
+
+        orderService.returnBook(id);
+
+        return new ResponseEntity("Book succesfully returned",HttpStatus.OK);
     }
 
 

@@ -8,11 +8,10 @@ import java.util.Objects;
 
 public class Book {
 
-    @JsonIgnore
+
     private int id;
     private String author;
     private String title;
-    @JsonIgnore
     private LocalDate dateOfReturn;
 
     public Book(int id,String author, String title, LocalDate dateOfReturn) {
@@ -29,6 +28,7 @@ public class Book {
         return id;
     }
 
+    @JsonIgnore
     public void setId(int id) {
         this.id = id;
     }
@@ -54,6 +54,7 @@ public class Book {
         return dateOfReturn;
     }
 
+    @JsonIgnore
     public void setDateOfReturn(LocalDate dateOfReturn) {
         this.dateOfReturn = dateOfReturn;
     }

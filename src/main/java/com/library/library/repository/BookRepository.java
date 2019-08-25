@@ -1,6 +1,8 @@
 package com.library.library.repository;
 
 import com.library.library.Model.Book;
+import com.library.library.exception.BookDoesNotExistsException;
+import com.library.library.exception.BookIsNotOrderedException;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,18 +49,30 @@ public class BookRepository {
 
     public Optional<Book> orderBook(int id, LocalDate dateOfReturn){
 
-        Optional<Book> bookOptional = bookSet.stream().filter(b -> b.getId() == id).findAny();
+        Optional<Book> bookOptional = bookSet.stream().
+                                    filter(b->b.getDateOfReturn()==null).
+                                    filter(b -> b.getId() == id).
+                                    findAny();
 
-        bookOptional.get().setDateOfReturn(dateOfReturn);
+            if(bookOptional.isPresent()){
+                bookOptional.get().setDateOfReturn(dateOfReturn);
+            }
+
+
 
         return bookOptional;
-
     }
 
 
-    public Book getBookById(int id) {
+    private Book getBookById(int id) {
 
-        return bookSet.stream().filter(book->book.getId()==id).findAny().get();
+        Optional<Book> bookOptional = bookSet.stream().filter(book -> book.getId() == id).findAny();
+
+        if(bookOptional.isPresent()){
+            return bookOptional.get();
+        } else {
+            throw new BookDoesNotExistsException("Book with id " + id + " doesn't exists");
+        }
 
     }
 
@@ -73,6 +87,24 @@ public class BookRepository {
 
         Book book = getBookById(id);
         bookSet.remove(book);
+
+    }
+
+    public void updateBook(Book updatedBook) {
+
+        Book oldBook = bookSet.stream().filter(b->b.getId()==updatedBook.getId()).findAny().get();
+
+        bookSet.remove(oldBook);
+        bookSet.add(updatedBook);
+
+    }
+
+    public void returnBook(int id) {
+
+        if(getBookById(id).getDateOfReturn() == null){
+            throw new BookIsNotOrderedException("You first have to order a book to return it");
+        }
+         getBookById(id).setDateOfReturn(null);
 
     }
 }

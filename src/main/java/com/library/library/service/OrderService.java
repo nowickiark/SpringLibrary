@@ -9,10 +9,12 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
+
 @Service
 public class OrderService {
 
     private BookRepository bookRepository;
+    static final int DAYS_TO_RETURN = 14;
 
     @Autowired
     public OrderService(BookRepository bookRepository) {
@@ -26,7 +28,7 @@ public class OrderService {
 
     public Optional<Book> orderBook(int id) {
 
-       LocalDate dateOfReturn = LocalDate.now().plusDays(14);
+       LocalDate dateOfReturn = LocalDate.now().plusDays(DAYS_TO_RETURN);
 
         Optional<Book> book = bookRepository.orderBook(id, dateOfReturn);
 
@@ -42,4 +44,12 @@ public class OrderService {
     }
 
 
+    public void updateBook(Book book) {
+        bookRepository.updateBook(book);
+    }
+
+    public void returnBook(int id) {
+
+        bookRepository.returnBook(id);
+    }
 }
