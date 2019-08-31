@@ -26,7 +26,7 @@ public class BookController {
         return orderService.getBooks(bookName);
     }
 
-    @GetMapping(value ="/books/order/{id}", produces = "application/json")
+/*    @GetMapping(value ="/books/order/{id}", produces = "application/json")
     public ResponseEntity<Book> orderBook(@PathVariable int id){
 
         Optional<Book> book = orderService.orderBook(id);
@@ -37,7 +37,21 @@ public class BookController {
         }
 
         return ResponseEntity.notFound().build();
+    }*/
+
+
+    @GetMapping(value = "/books/order/", produces = "application/json")
+    public ResponseEntity<Book> orderBook(@RequestParam int bookId, @RequestParam long userId ){
+
+        Optional<Book> book = orderService.orderBook(bookId,userId);
+
+        if(book.isPresent()){
+            return ResponseEntity.ok(book.get());
+        }
+
+        return ResponseEntity.notFound().build();
     }
+
 
     @PostMapping(value = "book/add",consumes = "application/json")
     public ResponseEntity<Integer> addBook(@RequestBody Book book){

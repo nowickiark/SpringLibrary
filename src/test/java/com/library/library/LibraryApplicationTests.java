@@ -1,7 +1,7 @@
 package com.library.library;
 
 import com.library.library.Model.Book;
-import com.library.library.repository.BookRepository;
+import com.library.library.repository.BookRepositoryOld;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class LibraryApplicationTests {
 
     @Autowired
-    private BookRepository bookRepository;
+    private BookRepositoryOld bookRepositoryOld;
 
 
     @Test
@@ -27,7 +27,7 @@ public class LibraryApplicationTests {
         LocalDate dateOfReturn = LocalDate.now().plusDays(14);
 
         //when
-        Optional<Book> actualBook = bookRepository.orderBook(2, dateOfReturn);
+        Optional<Book> actualBook = bookRepositoryOld.orderBook(2, dateOfReturn);
 
         //then
         Assert.assertEquals(dateOfReturn,actualBook.get().getDateOfReturn());
@@ -41,7 +41,7 @@ public class LibraryApplicationTests {
         int id = 15;
 
         //when
-        Optional<Book> actualBook = bookRepository.orderBook(id, dateOfReturn);
+        Optional<Book> actualBook = bookRepositoryOld.orderBook(id, dateOfReturn);
 
         //then
         Assert.assertFalse(actualBook.isPresent());
@@ -55,7 +55,7 @@ public class LibraryApplicationTests {
         LocalDate dateOfReturn = null;
 
         //when
-        Optional<Book> actualBook = bookRepository.orderBook(id, dateOfReturn);
+        Optional<Book> actualBook = bookRepositoryOld.orderBook(id, dateOfReturn);
 
         //then
         Assert.assertFalse(actualBook.isPresent());
